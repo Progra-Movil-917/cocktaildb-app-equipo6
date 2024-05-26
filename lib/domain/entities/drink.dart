@@ -1,11 +1,11 @@
 class Drink {
-  final int drinkId;
+  final String drinkId;
   final String name;
   final String category;
   final String imageUrl;
   final String instructions;
   final String glass;
-  final bool isAlcoholic;
+  final String alcholic;
 
   Drink(
       {required this.drinkId,
@@ -13,6 +13,6 @@ class Drink {
       required this.category,
       required this.instructions,
       required this.glass,
-      required this.isAlcoholic,
+      required this.alcholic,
       required this.imageUrl});
 }
