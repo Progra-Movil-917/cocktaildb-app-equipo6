@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final views = [const HomeView(), const DrinkListView(), const SearchView()];
+  final views = [CocktailsApp(), const DrinkListView(), const SearchView()];
   int currentIndex = 0;
 
   @override
