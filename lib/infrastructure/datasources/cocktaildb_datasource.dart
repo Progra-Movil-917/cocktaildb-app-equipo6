@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 class CocktailDBDatasource extends DrinksDatasource {
   final dio = Dio(BaseOptions(
-    baseUrl: 'www.thecocktaildb.com/api/json/v1/1',
+    baseUrl: 'https://www.thecocktaildb.com/api/json/v1/1',
   ));
 
   List<Drink> _jsonToDrinks(Map<String, dynamic> json) {
@@ -34,7 +34,6 @@ class CocktailDBDatasource extends DrinksDatasource {
   @override
   Future<List<Drink>> getDrinksByName(String name) async {
     final response = await dio.get('/search.php?s=$name');
-
-    return _jsonToDrinks(response as Map<String, dynamic>);
+    return _jsonToDrinks(response.data);
   }
 }
