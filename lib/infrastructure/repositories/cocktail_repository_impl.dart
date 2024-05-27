@@ -15,8 +15,7 @@ class CocktailRepositoryImpl extends DrinksRepository {
 
   @override
   Future<List<Drink>> getDrinksByFirstLetter(String letter) {
-    // TODO: implement getDrinksByFirstLetter
-    throw UnimplementedError();
+    return datasource.getDrinksByFirstLetter(letter);
   }
 
   @override

@@ -20,15 +20,15 @@ class CocktailDBDatasource extends DrinksDatasource {
   }
 
   @override
-  Future<Drink> getDrinkById(int id) {
-    // TODO: implement getDrinkById
-    throw UnimplementedError();
+  Future<List<Drink>> getDrinkById(String id) async {
+    final response = await dio.get('/lookup.php?i=$id');
+    return _jsonToDrinks(response.data);
   }
 
   @override
-  Future<List<Drink>> getDrinksByFirstLetter(String letter) {
-    // TODO: implement getDrinksByFirstLetter
-    throw UnimplementedError();
+  Future<List<Drink>> getDrinksByFirstLetter(String letter) async {
+    final response = await dio.get('/search.php?f=$letter');
+    return _jsonToDrinks(response.data);
   }
 
   @override

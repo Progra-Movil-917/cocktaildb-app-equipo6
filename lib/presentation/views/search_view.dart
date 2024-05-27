@@ -55,8 +55,8 @@ class _SearchViewState extends State<SearchView> {
                       borderRadius: BorderRadius.circular(15),
                       child: Image.network(
                         _drinks[index].imageUrl,
-                        height: 45,
-                        width: 45,
+                        height: 50,
+                        width: 50,
                         fit: BoxFit.cover,
                       )),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
