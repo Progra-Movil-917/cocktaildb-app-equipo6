@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cocktaildb_app/domain/entities/drink.dart';
 import 'package:cocktaildb_app/infrastructure/datasources/cocktaildb_datasource.dart';
 import 'package:cocktaildb_app/infrastructure/repositories/cocktail_repository_impl.dart';
@@ -12,18 +14,30 @@ class DrinkListView extends StatefulWidget {
 
 class _DrinkListViewState extends State<DrinkListView> {
   List<Drink> _drinks = [];
+  String _firstLetter = 'a';
   final CocktailRepositoryImpl _repositoryImpl =
       CocktailRepositoryImpl(CocktailDBDatasource());
 
-  Future<List<Drink>> getDrinks(String letter) async {
+  Future<List<Drink>> _getDrinks(String letter) async {
     return _repositoryImpl.getDrinksByFirstLetter(letter);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Random random = Random();
+    int r = random.nextInt(26); 
+    String caracterRandom = String.fromCharCode(
+        r + 'a'.codeUnitAt(0));
+    _firstLetter = caracterRandom;
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: FutureBuilder(
-        future: getDrinks('a'),
+        future: _getDrinks(_firstLetter),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
