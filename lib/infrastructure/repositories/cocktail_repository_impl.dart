@@ -8,9 +8,8 @@ class CocktailRepositoryImpl extends DrinksRepository {
   CocktailRepositoryImpl(this.datasource);
 
   @override
-  Future<Drink> getDrinkById(int id) {
-    // TODO: implement getDrinkById
-    throw UnimplementedError();
+  Future<List<Drink>> getDrinkById(String id) {
+    return datasource.getDrinkById(id);
   }
 
   @override

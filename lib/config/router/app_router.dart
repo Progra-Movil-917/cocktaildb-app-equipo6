@@ -6,6 +6,9 @@ final appRouter = GoRouter(initialLocation: "/", routes: [
   GoRoute(path: '/', builder: (context, state) => const HomeScreen(), routes: [
     GoRoute(
         path: 'drink/:id',
-        builder: (context, state) => const CocktailDetailScreen())
+        builder: (context, state) {
+          String id = state.pathParameters['id']!;
+          return CocktailDetailScreen( cocktailId: id );
+        })
   ])
 ]);
