@@ -2,7 +2,7 @@ import 'package:cocktaildb_app/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp( const MainApp() );
 }
 
 class MainApp extends StatelessWidget {
