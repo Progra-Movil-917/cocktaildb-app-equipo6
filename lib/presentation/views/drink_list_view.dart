@@ -4,6 +4,7 @@ import 'package:cocktaildb_app/domain/entities/drink.dart';
 import 'package:cocktaildb_app/infrastructure/datasources/cocktaildb_datasource.dart';
 import 'package:cocktaildb_app/infrastructure/repositories/cocktail_repository_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class DrinkListView extends StatefulWidget {
   const DrinkListView({super.key});
@@ -52,7 +53,9 @@ class _DrinkListViewState extends State<DrinkListView> {
               itemCount: _drinks.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      context.go('/drink/${_drinks[index].drinkId}');
+                    },
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.network(_drinks[index].imageUrl,

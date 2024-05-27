@@ -2,6 +2,7 @@ import 'package:cocktaildb_app/domain/entities/drink.dart';
 import 'package:cocktaildb_app/infrastructure/datasources/cocktaildb_datasource.dart';
 import 'package:cocktaildb_app/infrastructure/repositories/cocktail_repository_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -48,7 +49,9 @@ class _SearchViewState extends State<SearchView> {
               itemCount: _drinks.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    context.go('/drink/${_drinks[index].drinkId}');
+                  },
                   title: Text(_drinks[index].name),
                   subtitle: Text(_drinks[index].alcholic),
                   leading: ClipRRect(
