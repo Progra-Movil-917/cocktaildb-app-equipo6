@@ -36,4 +36,10 @@ class CocktailDBDatasource extends DrinksDatasource {
     final response = await dio.get('/search.php?s=$name');
     return _jsonToDrinks(response.data);
   }
+  
+  @override
+  Future<List<Drink>> getRandomDrinks() async {
+    final response = await dio.get('/random.php');
+    return _jsonToDrinks(response.data);
+  }
 }

@@ -21,5 +21,10 @@ class CocktailRepositoryImpl extends DrinksRepository {
   Future<List<Drink>> getDrinksByName(String name) {
     return datasource.getDrinksByName(name);
   }
+  
+  @override
+  Future<List<Drink>> getRandomDrinks() {
+    return datasource.getRandomDrinks();
+  }
 
 }

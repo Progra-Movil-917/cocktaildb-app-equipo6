@@ -1,130 +1,96 @@
-import 'dart:convert';
+import 'package:cocktaildb_app/domain/entities/drink.dart';
+import 'package:cocktaildb_app/infrastructure/datasources/cocktaildb_datasource.dart';
+import 'package:cocktaildb_app/infrastructure/repositories/cocktail_repository_impl.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:go_router/go_router.dart';
 
-void main() {
-  runApp(CocktailsApp());
-}
-
-class CocktailsApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cocktails App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  List<dynamic> cocktails = [];
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
   @override
-  void initState() {
-    super.initState();
-    fetchRandomCocktails();
-  }
+  State<HomeView> createState() => _HomeViewState();
+}
 
-  Future<void> fetchRandomCocktails() async {
-    List<dynamic> fetchedCocktails = [];
+class _HomeViewState extends State<HomeView> {
+  List<Drink> _drinks = [];
+  final CocktailRepositoryImpl _repositoryImpl =
+      CocktailRepositoryImpl(CocktailDBDatasource());
+
+  Future<List<Drink>> _getRandomCocktails() async {
+    List<Drink> randomCocktailsGetted = [];
 
     for (int i = 0; i < 13; i++) {
-      final response = await http.get(
-          Uri.parse('https://www.thecocktaildb.com/api/json/v1/1/random.php'));
-      if (response.statusCode == 200) {
-        fetchedCocktails.add(json.decode(response.body)['drinks'][0]);
-      } else {
-        throw Exception('Failed to load cocktails');
-      }
+      final drink = await _repositoryImpl.getRandomDrinks();
+      randomCocktailsGetted.add(drink[0]);
     }
 
-    setState(() {
-      cocktails = fetchedCocktails;
-    });
+    return randomCocktailsGetted;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Bienvenido a Cocktails APP'),
-      ),
-      body: ListView.builder(
-        itemCount: cocktails.length,
-        itemBuilder: (context, index) {
-          return Card(
-            margin: EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.network(
-                  cocktails[index]['strDrinkThumb'],
-                  width: double.infinity,
-                  height: 200.0,
-                  fit: BoxFit.cover,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16.0),
+    return Expanded(
+      child: FutureBuilder(
+        future: _getRandomCocktails(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasData) {
+            _drinks = snapshot.data!;
+          }
+
+          return ListView.builder(
+            itemCount: _drinks.length,
+            itemBuilder: (context, index) {
+              return Card(
+                margin: const EdgeInsets.all(10.0),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: (){
+                    context.go('/drink/${_drinks[index].drinkId}');
+                  },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        cocktails[index]['strDrink'],
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Image.network(
+                        _drinks[index].imageUrl,
+                        width: double.infinity,
+                        height: 200.0,
+                        fit: BoxFit.cover,
                       ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        cocktails[index]['strCategory'],
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.grey[600],
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _drinks[index].name,
+                              style: const TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8.0),
+                            Text(
+                              _drinks[index].category,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           );
         },
       ),
-      /*bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  fetchRandomCocktails();
-                },
-                child: Text('Home'),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('List Drinks'),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Search'),
-              ),
-            ],
-          ),
-        ),
-      ),*/
     );
   }
 }
