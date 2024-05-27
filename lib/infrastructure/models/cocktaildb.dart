@@ -16,7 +16,7 @@ class CocktailDB {
       required this.strCategory,
       required this.strDrinkThumb});
 
-  factory CocktailDB.fromJson(Map<String, String> json) => CocktailDB(
+  factory CocktailDB.fromJson(Map<String, dynamic> json) => CocktailDB(
       idDrink: json["idDrink"] ?? '',
       strDrink: json["strDrink"] ?? '',
       strAlcoholic: json["strAlcoholic"] ?? '',
@@ -25,7 +25,7 @@ class CocktailDB {
       strCategory: json["strCategory"] ?? '',
       strDrinkThumb: json["strDrinkThumb"] ?? '');
     
-    Map<String, String> toJson() => {
+    Map<String, dynamic> toJson() => {
       "idDrink": idDrink,
       "strDrink": strDrink,
       "strAlcoholic": strAlcoholic,
